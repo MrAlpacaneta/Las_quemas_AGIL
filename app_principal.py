@@ -18,7 +18,7 @@ def menu_principal():
         print("=" * 50)
         print("--- MÓDULO RESERVAS ---")
         print("1. Registrar nueva reserva (HU 1.1.1)")
-        print("2. Consultar calendario de reservas (HU 1.1.2) [Próximamente]")
+        print("2. Consultar calendario de reservas (HU 1.1.2)")
         print("\n--- MÓDULO CANCHAS (CRUD) ---")
         print("3. Consultar todas las canchas (HU 1.3.3)")
         print("4. Agregar nueva cancha (HU 1.3.1)")
@@ -33,8 +33,7 @@ def menu_principal():
         if opcion == "1":
             menu_registrar_reserva()
         elif opcion == "2":
-            print("\n[!] Módulo en desarrollo para la próxima sesión.")
-            input("Presione Enter para volver...")
+            menu_calendario_reservas()
         elif opcion == "3":
             menu_consultar_canchas()
         elif opcion == "4":
@@ -131,6 +130,31 @@ def menu_registrar_reserva():
         print(f"\nResultado: {mensaje}")
     except ValueError:
         print("\n[Error] La cancha y el precio deben ser valores numéricos.")
+        
+    input("\nPresione Enter para volver al menú...")
+
+def menu_calendario_reservas():
+    """Muestra el calendario visual en formato tabla para un día específico (Carolina)"""
+    print("\n--- CALENDARIO DE RESERVAS ---")
+    fecha_busqueda = input("Ingrese la fecha a consultar (DD/MM/AAAA): ")
+    
+    # Llamamos a la función de Bruno en base_datos.py
+    reservas = bd.consultar_calendario(fecha_busqueda)
+    
+    if len(reservas) == 0:
+        print(f"\nNo hay reservas registradas para el día {fecha_busqueda}.")
+    else:
+        print(f"\nAgenda ocupada para el día: {fecha_busqueda}")
+        # Formateo de tabla (Carolina - Tarea 1.1.2.1)
+        print("-" * 65)
+        print(f"{'HORA':<8} | {'N° CANCHA':<10} | {'TIPO':<10} | {'TITULAR/JUGADOR':<25}")
+        print("-" * 65)
+        
+        for r in reservas:
+            # r[0]=hora, r[1]=n_cancha, r[2]=tipo, r[3]=jugadores
+            print(f"{r[0]:<8} | {r[1]:<10} | {r[2]:<10} | {r[3]:<25}")
+            
+        print("-" * 65)
         
     input("\nPresione Enter para volver al menú...")
 

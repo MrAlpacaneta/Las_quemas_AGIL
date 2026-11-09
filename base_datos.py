@@ -151,3 +151,35 @@ def guardar_reserva(fecha, hora, cancha, jugadores, precio):
     finally:
         cursor.close()
         conexion.close()
+
+def consultar_calendario(fecha):
+    """
+    Busca todas las reservas para una fecha específica cruzando datos con las canchas.
+    Asociado a la Tarea 1.1.2.2 (Filtros de búsqueda).
+    """
+    conexion = conectar_bd()
+    if not conexion:
+        return []
+    
+    try:
+        cursor = conexion.cursor()
+        # Hacemos un JOIN para traer el tipo de cancha además de los datos de la reserva,
+        # ordenado por hora para que se vea como una agenda real.
+        cursor.execute(
+            """
+            SELECT r.hora_reserva, r.numero_cancha, c.tipo_cancha, r.jugadores 
+            FROM RESERVAS r
+            JOIN CANCHAS c ON r.numero_cancha = c.numero_cancha
+            WHERE r.fecha_reserva = :1
+            ORDER BY r.hora_reserva, r.numero_cancha
+            """,
+            [fecha]
+        )
+        resultados = cursor.fetchall()
+        return resultados
+    except Exception as e:
+        print(f"Error al consultar el calendario: {e}")
+        return []
+    finally:
+        cursor.close()
+        conexion.close()
