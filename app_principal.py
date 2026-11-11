@@ -1,35 +1,29 @@
-# ==========================================
-# APLICACIÓN PRINCIPAL - LAS QUEMAS (VERSIÓN TERMINAL)
-# Desarrollado en Python para consola
-# ==========================================
+# APLICACIÓN - LAS QUEMAS (VERSIÓN 1.0)
 
 import base_datos as bd
 
 def limpiar_pantalla():
-    """Imprime saltos de línea para simular que se limpia la consola (Kevin)"""
     print("\n" * 2)
 
 def menu_principal():
-    """Diseño del menú principal interactivo (Tarea de Kevin)"""
     while True:
         limpiar_pantalla()
         print("=" * 50)
-        print("  SISTEMA ESPACIO DEPORTIVO LAS QUEMAS - SPRINT 1")
+        print("  SISTEMA ESPACIO DEPORTIVO LAS QUEMAS")
         print("=" * 50)
-        print("--- MÓDULO RESERVAS ---")
-        print("1. Registrar nueva reserva (HU 1.1.1)")
-        print("2. Consultar calendario de reservas (HU 1.1.2)")
-        print("\n--- MÓDULO CANCHAS (CRUD) ---")
-        print("3. Consultar todas las canchas (HU 1.3.3)")
-        print("4. Agregar nueva cancha (HU 1.3.1)")
-        print("5. Editar datos de cancha (HU 1.3.2)")
-        print("6. Dar de baja/Inactivar cancha (HU 1.3.4)")
+        print("--- RESERVAS ---")
+        print("1. Registrar nueva reserva")
+        print("2. Calendario de reservas")
+        print("\n--- CANCHAS ---")
+        print("3. Consultar todas las canchas")
+        print("4. Agregar nueva cancha")
+        print("5. Editar datos de cancha")
+        print("6. Dar de baja/Inactivar cancha")
         print("\n0. Salir del sistema")
         print("=" * 50)
         
         opcion = input("Seleccione una opción: ")
 
-        # LÓGICA DE NAVEGACIÓN (Bruno)
         if opcion == "1":
             menu_registrar_reserva()
         elif opcion == "2":
@@ -43,25 +37,19 @@ def menu_principal():
         elif opcion == "6":
             menu_baja_cancha()
         elif opcion == "0":
-            print("\nCerrando el sistema... ¡Hasta pronto!")
+            print("\nCerrando el sistema...")
             break
         else:
             print("\n[Error] Opción no válida. Intente nuevamente.")
             input("Presione Enter para continuar...")
 
-# ==========================================
-# FUNCIONES DE INTERFAZ Y LÓGICA
-# ==========================================
-
 def menu_consultar_canchas():
-    """Muestra los datos en formato de tabla de texto (Tarea de Carolina)"""
     print("\n--- LISTADO DE CANCHAS ---")
     canchas = bd.obtener_canchas()
     
     if len(canchas) == 0:
-        print("No hay canchas registradas o no hay conexión a la base de datos.")
+        print("No hay canchas registradas en el sistema.")
     else:
-        # Formateo básico para que parezca una tabla
         print(f"{'N°':<5} | {'TIPO':<10} | {'PRECIO':<10} | {'ESTADO':<10}")
         print("-" * 45)
         for c in canchas:
@@ -70,14 +58,11 @@ def menu_consultar_canchas():
     input("\nPresione Enter para volver al menú...")
 
 def menu_agregar_cancha():
-    """Captura de datos y validación básica para nueva cancha (Bruno y Kevin)"""
     print("\n--- AGREGAR NUEVA CANCHA ---")
     try:
         numero = int(input("Ingrese el número de la cancha: "))
         tipo = input("Ingrese el tipo (Padel/Futbol): ")
         precio = int(input("Ingrese el precio base: "))
-        
-        # Llamamos al motor de base de datos
         exito, mensaje = bd.agregar_cancha(numero, tipo, precio)
         print(f"\nResultado: {mensaje}")
         
@@ -87,7 +72,6 @@ def menu_agregar_cancha():
     input("\nPresione Enter para volver al menú...")
 
 def menu_editar_cancha():
-    """Captura datos para modificar una cancha existente"""
     print("\n--- EDITAR DATOS DE CANCHA ---")
     try:
         numero = int(input("Ingrese el número de la cancha a editar: "))
@@ -103,7 +87,6 @@ def menu_editar_cancha():
     input("\nPresione Enter para volver al menú...")
 
 def menu_baja_cancha():
-    """Borrado lógico de una cancha"""
     print("\n--- DAR DE BAJA UNA CANCHA ---")
     try:
         numero = int(input("Ingrese el número de la cancha a dar de baja: "))
@@ -115,7 +98,6 @@ def menu_baja_cancha():
     input("\nPresione Enter para volver al menú...")
 
 def menu_registrar_reserva():
-    """Captura los datos de una reserva validando campos (Bruno)"""
     print("\n--- REGISTRAR NUEVA RESERVA ---")
     
     fecha = input("Fecha (DD/MM/AAAA): ")
@@ -134,11 +116,9 @@ def menu_registrar_reserva():
     input("\nPresione Enter para volver al menú...")
 
 def menu_calendario_reservas():
-    """Muestra el calendario visual en formato tabla para un día específico (Carolina)"""
     print("\n--- CALENDARIO DE RESERVAS ---")
     fecha_busqueda = input("Ingrese la fecha a consultar (DD/MM/AAAA): ")
     
-    # Llamamos a la función de Bruno en base_datos.py
     reservas = bd.consultar_calendario(fecha_busqueda)
     
     if len(reservas) == 0:
@@ -158,8 +138,5 @@ def menu_calendario_reservas():
         
     input("\nPresione Enter para volver al menú...")
 
-# ==========================================
-# INICIO DE LA APLICACIÓN
-# ==========================================
 if __name__ == "__main__":
     menu_principal()
