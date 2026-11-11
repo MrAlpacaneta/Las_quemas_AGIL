@@ -59,16 +59,17 @@ def menu_consultar_canchas():
 
 def menu_agregar_cancha():
     print("\n--- AGREGAR NUEVA CANCHA ---")
-    try:
-        numero = int(input("Ingrese el número de la cancha: "))
-        tipo = input("Ingrese el tipo (Padel/Futbol): ")
-        precio = int(input("Ingrese el precio base: "))
-        exito, mensaje = bd.agregar_cancha(numero, tipo, precio)
-        print(f"\nResultado: {mensaje}")
-        
-    except ValueError:
-        print("\n[Error] El número de cancha y el precio deben ser valores numéricos.")
-        
+    tipo = input("Ingrese el tipo de cancha (Ej: Padel, Futbol): ")
+
+    while True:
+        try:
+            precio = int(input("Ingrese el precio base de la cancha: "))
+            break
+        except ValueError:
+            print("\n[Error] El precio debe ser un número entero. Intente nuevamente.")
+    
+    bd.agregar_cancha(tipo, precio)
+    
     input("\nPresione Enter para volver al menú...")
 
 def menu_editar_cancha():

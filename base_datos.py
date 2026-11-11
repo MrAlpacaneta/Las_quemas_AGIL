@@ -31,22 +31,33 @@ def obtener_canchas():
         cursor.close()
         conexion.close()
 
-def agregar_cancha(numero, tipo, precio):
+def agregar_cancha(tipo_cancha, precio_base):
+    """
+    Agrega una nueva cancha calculando automáticamente el siguiente número (Autoincremental).
+    """
     conexion = conectar_bd()
     if not conexion:
-        return False, "Error de conexión"
+        return False
     
     try:
         cursor = conexion.cursor()
+        cursor.execute("SELECT NVL(MAX(numero_cancha), 0) + 1 FROM CANCHAS")
+        nuevo_numero = cursor.fetchone()[0]
         cursor.execute(
-            "INSERT INTO CANCHAS (numero_cancha, tipo_cancha, precio_base, estado) VALUES (:1, :2, :3, 'Activa')",
-            [numero, tipo, precio]
+            """
+            INSERT INTO CANCHAS (numero_cancha, tipo_cancha, precio_base, estado) 
+            VALUES (:1, :2, :3, 'Activa')
+            """,
+            [nuevo_numero, tipo_cancha, precio_base]
         )
         conexion.commit()
-        return True, "Cancha agregada exitosamente"
+        
+        print(f"\nEl registro de la cancha se realizó con éxito. Número asignado: {nuevo_numero}")
+        return True
+        
     except Exception as e:
-        conexion.rollback()
-        return False, f"Error al agregar cancha: {e}"
+        print(f"\nError al registrar la cancha: {e}")
+        return False
     finally:
         cursor.close()
         conexion.close()
